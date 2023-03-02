@@ -7,3 +7,5 @@ CNN and image processing techniques paired with a Java GUI, for training sociall
 - Consistent clear audible voice (Audio level thresholding, Good pause detection) ~ Voice
 - Consistent body movement (Motion detection) ~ Motion
 - Noo uhh, ummm, aaaa (CNN) ~ Filler words
+<br>
+ Dataset for audio: https://www.kaggle.com/datasets/ikrbasak/sep-28k?resource=download
