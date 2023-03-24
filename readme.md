@@ -14,6 +14,6 @@ Dataset for audio: https://www.kaggle.com/datasets/ikrbasak/sep-28k?resource=dow
 <br>
 model stacking: https://www.youtube.com/watch?v=0BGLfYY26zQ
 <br>
-![assets/DesignStruct.png](/path/to/image.png "Project Design")
+![Design](assets/DesignStruct.png?raw=true)
 <br>
 keywords: OpenCV, TensorFlow, Pyqt5, 
