@@ -9,7 +9,7 @@ CNN and image processing techniques paired with a QT GUI, for training socially 
 - Consistent body movement (Motion detection) ~ [Motion](https://www.youtube.com/watch?v=QLHMtE5XsMs)
 - Noo uhh, ummm, aaaa (CNN) ~ [Filler words](https://www.youtube.com/watch?v=NITIefkRae0)
 <br> <br>
-
+put opencv video feed in pyqt5 window: https://www.youtube.com/watch?v=dTDgbx-XelY <br>
 Dataset for audio: https://www.kaggle.com/datasets/ikrbasak/sep-28k?resource=download
 <br>
 model stacking: https://www.youtube.com/watch?v=0BGLfYY26zQ
