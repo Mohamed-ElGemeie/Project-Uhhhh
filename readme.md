@@ -10,6 +10,10 @@ CNN and image processing techniques paired with a QT GUI, for training socially 
 - Noo uhh, ummm, aaaa (CNN) ~ [Filler words](https://www.youtube.com/watch?v=NITIefkRae0)
 <br> <br>
 put opencv video feed in pyqt5 window: https://www.youtube.com/watch?v=dTDgbx-XelY <br>
+error:
+- https://stackoverflow.com/questions/67120450/error-2unspecified-error-the-function-is-not-implemented-rebuild-the-libra
+
+<br>
 Dataset for audio: https://www.kaggle.com/datasets/ikrbasak/sep-28k?resource=download
 <br>
 model stacking: https://www.youtube.com/watch?v=0BGLfYY26zQ
