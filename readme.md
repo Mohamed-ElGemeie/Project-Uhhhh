@@ -4,20 +4,26 @@
 CNN and image processing techniques paired with a QT GUI, for training socially anxious people with presenting and public speaking.
 <br>
 
-- Body language pose (Object pose CNN with point rules) ~ [Pose](https://www.youtube.com/watch?v=aySurynUNAw)
-- Consistent clear audible voice (Audio level thresholding, Good pause detection) ~ [Voice](https://www.youtube.com/watch?v=av8E8qLZswU) - [Level](https://stackoverflow.com/questions/26478315/getting-volume-levels-from-pyaudio-for-use-in-arduino)
-- Consistent body movement (Motion detection) ~ [Motion](https://www.youtube.com/watch?v=QLHMtE5XsMs)
-- Noo uhh, ummm, aaaa (CNN) ~ [Filler words](https://www.youtube.com/watch?v=NITIefkRae0)
-<br> <br>
-put opencv video feed in pyqt5 window: https://www.youtube.com/watch?v=dTDgbx-XelY <br>
-error:
-- https://stackoverflow.com/questions/67120450/error-2unspecified-error-the-function-is-not-implemented-rebuild-the-libra
+![Design](assets/DesignStruct.png?raw=true)
 
 <br>
-Dataset for audio: https://www.kaggle.com/datasets/ikrbasak/sep-28k?resource=download
+
+
+### Sources and links:
+
+- Body pose landmarking tutorial
+    - https://www.youtube.com/watch?v=aySurynUNAw (Python with MediaPipe (Google Lib) )
+- Motion detection with image differance
+    - https://www.youtube.com/watch?v=5jKj6dRKaZc (Python Tutorial)
+- Embed Opencv camera feed inside PYQT6 GUI window
+    - https://www.youtube.com/watch?v=dTDgbx-XelY 
+
+###  Error and bug fixes
+- The function is not implemented. Rebuild the library with Windows, GTK+ 2.x or Cocoa support
+    - https://stackoverflow.com/questions/67120450/error-2unspecified-error-the-function-is-not-implemented-rebuild-the-libra
+    
 <br>
-model stacking: https://www.youtube.com/watch?v=0BGLfYY26zQ
-<br>
-![Design](assets/DesignStruct.png?raw=true)
-<br>
+
+
+
 keywords: OpenCV, TensorFlow, Pyqt5, 
