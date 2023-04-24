@@ -19,7 +19,9 @@ CNN and image processing techniques paired with a QT GUI, for training socially 
     - https://www.youtube.com/watch?v=dTDgbx-XelY 
 
 <br>
+
 ![file](assets/file_struct.PNG?raw=true)
+
 <br>
 
 ###  Error and bug fixes
