@@ -7,7 +7,6 @@ CNN and image processing techniques paired with a QT GUI, for training socially 
 ![Design](assets/DesignStruct.png?raw=true)
 
 <br>
-<p\>
 
 
 ### Sources and links:
@@ -21,12 +20,9 @@ CNN and image processing techniques paired with a QT GUI, for training socially 
 
 <br>
 
-<p align="center">
-
 ![file](assets/file_struct.PNG?raw=true)
 
 <br>
-<p\>
 
 ###  Error and bug fixes
 
