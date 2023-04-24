@@ -24,6 +24,21 @@ CNN and image processing techniques paired with a QT GUI, for training socially 
 
 <br>
 
+### installation
+
+- pip
+
+    - to avoid error in opencv:
+        - ```pip uninstall opencv-python```
+        - ```pip install opencv-python```
+    - ```pip install numpy```
+    - ```pip install mediapipe```
+    - ```pip install PyQt6```
+
+<br>
+Make sure to install all the packages in the same interpreter and envirmoent.
+<br>
+
 ###  Error and bug fixes
 
 - The function is not implemented. Rebuild the library with Windows, GTK+ 2.x or Cocoa support
