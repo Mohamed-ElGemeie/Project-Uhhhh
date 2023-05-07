@@ -8,6 +8,67 @@ from comp import Pose_Detection as ps , Motion_Detection as md
 from utils import fps
 import numpy as np
 
+class MenuWindow(QWidget):
+    def __init__(self) -> None:
+        super(MenuWindow, self).__init__()
+
+        self.setFixedSize(500, 400)
+
+        self.VBL = QVBoxLayout()
+
+        self.setWindowTitle("Presentation Assistant V0.1")
+
+        # Title Font
+        title_font = QFont()
+        title_font.setPointSize(24)
+
+        # Button Font
+        button_font = QFont()
+        button_font.setPointSize(16)
+
+        # Title Label
+        self.TitleLBL = QLabel("Presentation Assistant V0.1")
+        self.TitleLBL.setFont(title_font)
+        self.TitleLBL.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.VBL.addWidget(self.TitleLBL)
+
+        # Full Body Detection Button
+        self.FullBodyBTN = QPushButton("Full Body Detection")
+        self.FullBodyBTN.setFont(button_font)
+        self.FullBodyBTN.clicked.connect(self.start_main_window)
+        self.VBL.addWidget(self.FullBodyBTN)
+
+        # Facial Detection Button
+        self.FacialBTN = QPushButton("Facial Detection")
+        self.FacialBTN.setFont(button_font)
+        self.VBL.addWidget(self.FacialBTN)
+
+        self.setLayout(self.VBL)
+
+        stylesheet = """
+            QWidget {
+                background-color: #3A72A5;
+            }
+            QLabel {
+                color: #FFFFFF;
+            }
+            QPushButton {
+                background-color: #244678;
+                border: none;
+                color: #FFFFFF;
+                padding: 10px;
+            }
+            QPushButton:hover {
+                background-color: #784b24;
+            }
+        """
+        self.setStyleSheet(stylesheet)
+
+    def start_main_window(self):
+        self.hide()
+        self.main_window = MainWindow()
+        self.main_window.show()
+
 class MainWindow(QWidget):
     def __init__(self) -> None:
         super(MainWindow , self).__init__()
@@ -101,6 +162,6 @@ class Worker1(QThread):
         
 if __name__ == "__main__":
     App = QApplication(sys.argv)
-    Root = MainWindow()
+    Root = MenuWindow()
     Root.show()
     sys.exit(App.exec())
