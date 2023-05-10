@@ -6,7 +6,7 @@ import cv2
 from time import time
 from comp import Pose_Detection as ps , Motion_Detection as md
 from utils import fps
-import numpy as np
+
 
 class MenuWindow(QWidget):
     def __init__(self) -> None:
