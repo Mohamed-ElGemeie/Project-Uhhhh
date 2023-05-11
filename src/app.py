@@ -8,70 +8,77 @@ from comp import Pose_Detection as ps , Motion_Detection as md
 from utils import fps
 import numpy as np
 
+stylesheet = """
+    QWidget {
+        background-color: #894fda;
+    }
+    QLabel {
+        color: #FFFFFF;
+        font-weight: bold;
+        font-size: 16px;
+    }
+    QLabel#TitleLabel {
+        background-color: #b198f6;
+        font-size: 48px;
+    }
+    QPushButton {
+        background-color: #1aacb6;
+        border: none;
+        color: #FFFFFF;
+        font-weight: bold;
+        font-size: 16px;
+        padding: 10px;
+    }
+    QPushButton:hover {
+        background-color: #b198f6;
+    }
+"""
+
 class MenuWindow(QWidget):
     def __init__(self) -> None:
         super(MenuWindow, self).__init__()
 
-        self.setFixedSize(500, 400)
+        self.setMinimumSize(700, 400)
+        self.setMaximumSize(800, 600)
 
         self.VBL = QVBoxLayout()
 
         self.setWindowTitle("Presentation Assistant V0.1")
 
-        # Title Font
-        title_font = QFont()
-        title_font.setPointSize(24)
-
-        # Button Font
-        button_font = QFont()
-        button_font.setPointSize(16)
-
         # Title Label
         self.TitleLBL = QLabel("Presentation Assistant V0.1")
-        self.TitleLBL.setFont(title_font)
+        self.TitleLBL.setObjectName("TitleLabel")
         self.TitleLBL.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.VBL.addWidget(self.TitleLBL)
 
+        # About Label
+        self.AboutLBL = QLabel("This is a program that helps you analyze your presentation performance.\nChoose a mode to start.")
+        self.AboutLBL.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.VBL.addWidget(self.AboutLBL)
+
+        self.VBL.addSpacing(20)
+
         # Full Body Detection Button
         self.FullBodyBTN = QPushButton("Full Body Detection")
-        self.FullBodyBTN.setFont(button_font)
-        self.FullBodyBTN.clicked.connect(self.start_main_window)
+        self.FullBodyBTN.clicked.connect(self.start_fullbody_window)
         self.VBL.addWidget(self.FullBodyBTN)
 
         # Facial Detection Button
         self.FacialBTN = QPushButton("Facial Detection")
-        self.FacialBTN.setFont(button_font)
         self.VBL.addWidget(self.FacialBTN)
 
         self.setLayout(self.VBL)
 
-        stylesheet = """
-            QWidget {
-                background-color: #3A72A5;
-            }
-            QLabel {
-                color: #FFFFFF;
-            }
-            QPushButton {
-                background-color: #244678;
-                border: none;
-                color: #FFFFFF;
-                padding: 10px;
-            }
-            QPushButton:hover {
-                background-color: #784b24;
-            }
-        """
         self.setStyleSheet(stylesheet)
 
-    def start_main_window(self):
+    def start_fullbody_window(self):
         self.hide()
-        self.main_window = MainWindow()
-        self.main_window.show()
+        self.fullbody_window = FullBodyWindow()
+        self.fullbody_window.show()
 
-class MainWindow(QWidget):
+class FullBodyWindow(QWidget):
     def __init__(self) -> None:
-        super(MainWindow , self).__init__()
+        super(FullBodyWindow , self).__init__()
 
 
         self.VBL = QVBoxLayout()
@@ -80,10 +87,10 @@ class MainWindow(QWidget):
         self.FeedLabel = QLabel()
         self.VBL.addWidget(self.FeedLabel)
 
-        # the cancel button
-        self.CancelBTN = QPushButton("Cancel")
-        self.CancelBTN.clicked.connect(self.CancelFeed)
-        self.VBL.addWidget(self.CancelBTN)
+        # the Menu button
+        self.MenuBTN = QPushButton("Menu")
+        self.MenuBTN.clicked.connect(self.menu_window)
+        self.VBL.addWidget(self.MenuBTN)
 
         # the thread that holds creates the camera feed
         self.Worker1 = Worker1()
@@ -93,11 +100,16 @@ class MainWindow(QWidget):
 
         self.setLayout(self.VBL)
 
+        self.setStyleSheet(stylesheet)
+
     def ImageUpdateSlot(self,Image):
         self.FeedLabel.setPixmap(QPixmap.fromImage(Image))
 
-    def CancelFeed(self):
+    def menu_window(self):
         self.Worker1.stop()
+        self.hide()
+        self.menu_window = MenuWindow()
+        self.menu_window.show()
 
 class Worker1(QThread):
 
