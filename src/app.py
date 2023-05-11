@@ -130,6 +130,9 @@ class Worker1(QThread):
                 continue
             Time_start = time()
 
+            
+            # Puts the amount of motion detected
+            md.detect_motion(frame)
 
             # Puts the current pose's label and landmarks
             ps.detect_pose(frame)
@@ -137,8 +140,7 @@ class Worker1(QThread):
             # Puts the current FPS of the camera feed
             fps.get_fps(frame)
 
-            # Puts the amount of motion detected
-            md.detect_motion(frame)
+
 
 
             

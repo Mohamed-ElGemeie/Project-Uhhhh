@@ -3,39 +3,33 @@ import numpy as np
 
 
 diffs = []
-First_blur_frame = np.ndarray([])
-Last_blur_frame = np.ndarray([])
+First_gray_frame = np.ndarray([])
+Last_gray_frame = np.ndarray([])
 
 if __name__ != "__main__":
 
-    def get_blur(frame):
-
-        gray_first = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)#b2lb l gray scale ashan a 3rf a3ml minus ala level wahed bs msh 3
-        gaus_first = cv2.GaussianBlur(gray_first,(21,21),0)
-        blur_first = cv2.blur(gaus_first,(5,5))
-
-        return blur_first
 
     def detect_motion(frame):
         global diffs
-        global First_blur_frame
-        global Last_blur_frame
+        global First_gray_frame
+        global Last_gray_frame
 
         # check if array is empty
-        if not Last_blur_frame.any():
-            Last_blur_frame = get_blur(frame)
+        if not Last_gray_frame.any():
+            Last_gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
             return
         else:
-            First_blur_frame = get_blur(frame)
+            First_gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
 
         # Find the absolute difference between frames
-        diff = cv2.absdiff(First_blur_frame, Last_blur_frame)
+        diff = cv2.absdiff(First_gray_frame, Last_gray_frame)
 
 
-        Last_blur_frame = First_blur_frame
+        Last_gray_frame = First_gray_frame
         # threshold between values bigger and smaller than 20
-        thresh = cv2.threshold(diff, 20, 255, cv2.THRESH_BINARY)[1]
+        gaus_first = cv2.GaussianBlur(diff,(13,13),0)
+        thresh = cv2.threshold(gaus_first, 10, 255, cv2.THRESH_BINARY)[1]
         # store differance between frames
         diff_num = round(np.mean(thresh),2)
 
@@ -47,6 +41,7 @@ if __name__ != "__main__":
             diffs.append(diff_num)
         
         diffs_mean = int(np.mean(diffs))
+
         cv2.putText(frame,
                         "diff: {}".format(diffs_mean),
                         (50,150),
