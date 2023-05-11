@@ -34,6 +34,10 @@ stylesheet = """
     }
 """
 
+current_pose = "pose"
+current_fps = 0
+current_motion = 0
+
 class MenuWindow(QWidget):
     def __init__(self) -> None:
         super(MenuWindow, self).__init__()
@@ -80,23 +84,33 @@ class FullBodyWindow(QWidget):
     def __init__(self) -> None:
         super(FullBodyWindow , self).__init__()
 
-
+        self.HBL = QHBoxLayout()
         self.VBL = QVBoxLayout()
-        
+
+        self.VBL.addLayout(self.HBL)
+
         # The box that holds the image
         self.FeedLabel = QLabel()
-        self.VBL.addWidget(self.FeedLabel)
+        self.HBL.addWidget(self.FeedLabel)
+
+        # Data to show
+        self.DataLBL = QLabel("FPS: " + str(current_fps) + "\n"
+                              "Motion: " + str(current_motion) + "\n"
+                              "Pose: " + str(current_pose)
+                              )
+        self.DataLBL.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.HBL.addWidget(self.DataLBL)
 
         # the Menu button
         self.MenuBTN = QPushButton("Menu")
         self.MenuBTN.clicked.connect(self.menu_window)
         self.VBL.addWidget(self.MenuBTN)
 
+
         # the thread that holds creates the camera feed
         self.Worker1 = Worker1()
         self.Worker1.start()
         self.Worker1.ImageUpdate.connect(self.ImageUpdateSlot)
-
 
         self.setLayout(self.VBL)
 
@@ -114,6 +128,9 @@ class FullBodyWindow(QWidget):
 class Worker1(QThread):
 
     ImageUpdate = pyqtSignal(QImage)
+    global current_pose
+    global current_fps
+    global current_motion
     
     def run(self):
         
@@ -142,20 +159,17 @@ class Worker1(QThread):
                 continue
             Time_start = time()
 
-            
-            # Puts the amount of motion detected
-            md.detect_motion(frame)
-
             # Puts the current pose's label and landmarks
-            ps.detect_pose(frame)
+            current_pose = ps.detect_pose(frame)
             
             # Puts the current FPS of the camera feed
-            fps.get_fps(frame)
+            current_fps = fps.get_fps(frame)
 
+            # Puts the amount of motion detected
+            current_motion = md.detect_motion(frame)
 
+            print(current_pose, current_fps, current_motion)
 
-
-            
             # converts the image from BGR to RGB for display
             frame =  cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
             # to QImage
