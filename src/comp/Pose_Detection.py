@@ -44,9 +44,9 @@ if __name__ != "__main__":
         if results.pose_landmarks:
             
             # draw the landmarks on our frame
-            mp_drawing.draw_landmarks(image = frame,
-                                    landmark_list = results.pose_landmarks,
-                                    connections = mp_pose.POSE_CONNECTIONS)
+            # mp_drawing.draw_landmarks(image = frame,
+            #                         landmark_list = results.pose_landmarks,
+            #                         connections = mp_pose.POSE_CONNECTIONS)
             
             # append the points to the list for furthur use
             for landmark in results.pose_landmarks.landmark:
@@ -214,19 +214,19 @@ if __name__ != "__main__":
             
         labels[cur_label] +=1
         
-        if label == "unknowen":
-            color  = (0,0,255)
-        elif label == "incomplete":
-            color = (255,0,0)
-        else:
-            color = (0,255,0)
+        # if label == "unknowen":
+        #     color  = (0,0,255)
+        # elif label == "incomplete":
+        #     color = (255,0,0)
+        # else:
+        #     color = (0,255,0)
 
 
-        cv2.putText(frame,
-            label,
-            (50,50),
-            cv2.FONT_HERSHEY_PLAIN, 2,
-            color, 3)
+        # cv2.putText(frame,
+        #     label,
+        #     (50,50),
+        #     cv2.FONT_HERSHEY_PLAIN, 2,
+        #     color, 3)
         
         return label
         

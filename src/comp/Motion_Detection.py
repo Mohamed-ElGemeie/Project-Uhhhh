@@ -42,11 +42,11 @@ if __name__ != "__main__":
         
         diffs_mean = int(np.mean(diffs))
 
-        cv2.putText(frame,
-                        "diff: {}".format(diffs_mean),
-                        (50,150),
-                    cv2.FONT_HERSHEY_PLAIN, 2,
-                    (255), 3)
+        # cv2.putText(frame,
+        #                 "diff: {}".format(diffs_mean),
+        #                 (50,150),
+        #             cv2.FONT_HERSHEY_PLAIN, 2,
+        #             (255), 3)
         
         return diffs_mean
 

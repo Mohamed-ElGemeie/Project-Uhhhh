@@ -1,10 +1,13 @@
 import sys
+import typing
+from PyQt6.QtCore import QObject
 from PyQt6.QtGui import *
 from PyQt6.QtWidgets import *
 from PyQt6.QtCore import *
 import cv2
 from time import time
 from comp import Pose_Detection as ps , Motion_Detection as md
+from comp import Emotion_Detection as ed
 from utils import fps
 
 
@@ -63,12 +66,13 @@ class MenuWindow(QWidget):
         self.VBL.addSpacing(20)
 
         # Full Body Detection Button
-        self.FullBodyBTN = QPushButton("Full Body Detection")
+        self.FullBodyBTN = QPushButton("Offline Presentation")
         self.FullBodyBTN.clicked.connect(self.start_fullbody_window)
         self.VBL.addWidget(self.FullBodyBTN)
 
         # Facial Detection Button
-        self.FacialBTN = QPushButton("Facial Detection")
+        self.FacialBTN = QPushButton("Online Presentation")
+        self.FacialBTN.clicked.connect(self.start_facial_window)
         self.VBL.addWidget(self.FacialBTN)
 
         self.setLayout(self.VBL)
@@ -77,12 +81,19 @@ class MenuWindow(QWidget):
 
     def start_fullbody_window(self):
         self.hide()
-        self.fullbody_window = FullBodyWindow()
+        self.fullbody_window = FullBodyWindow(body = True)
         self.fullbody_window.show()
+    
+    def start_facial_window(self):
+        self.hide()
+        self.facial_window = FullBodyWindow(body= False)
+        self.facial_window.show()
 
 class FullBodyWindow(QWidget):
-    def __init__(self) -> None:
+    def __init__(self, body) -> None:
         super(FullBodyWindow , self).__init__()
+
+        self.body = body
 
         self.HBL = QHBoxLayout()
         self.VBL = QVBoxLayout()
@@ -94,10 +105,10 @@ class FullBodyWindow(QWidget):
         self.HBL.addWidget(self.FeedLabel)
 
         # Data to show
-        self.DataLBL = QLabel("FPS: " + str(current_fps) + "\n"
-                              "Motion: " + str(current_motion) + "\n"
-                              "Pose: " + str(current_pose)
-                              )
+        # "FPS: " + str(current_fps) + "\n"
+        #                       "Motion: " + str(current_motion) + "\n"
+        #                       "Pose: " + str(current_pose)
+        self.DataLBL = QLabel("")
         self.DataLBL.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.HBL.addWidget(self.DataLBL)
 
@@ -108,10 +119,10 @@ class FullBodyWindow(QWidget):
 
 
         # the thread that holds creates the camera feed
-        self.Worker1 = Worker1()
+        self.Worker1 = Worker1(body,self)
         self.Worker1.start()
         self.Worker1.ImageUpdate.connect(self.ImageUpdateSlot)
-
+        self.Worker1.label_dict.connect(self.DictUpdateSlot)
         self.setLayout(self.VBL)
 
         self.setStyleSheet(stylesheet)
@@ -119,6 +130,16 @@ class FullBodyWindow(QWidget):
     def ImageUpdateSlot(self,Image):
         self.FeedLabel.setPixmap(QPixmap.fromImage(Image))
 
+    def DictUpdateSlot(self,dict1):
+        if(self.body):
+            self.DataLBL.setText("FPS: " + str(dict1['Fps']) + "\n"
+                              "Motion: " + str(dict1["Motion"]) + "\n"
+                              "Pose: " + str(dict1['Pose']))
+        else:
+            self.DataLBL.setText("FPS: " + str(dict1['Fps']) + "\n"
+                              "Emotion: " + str(dict1["Emotion"]))
+            
+        
     def menu_window(self):
         self.Worker1.stop()
         self.hide()
@@ -127,16 +148,21 @@ class FullBodyWindow(QWidget):
 
 class Worker1(QThread):
 
+    def __init__(self,body, parent: QObject):
+        super().__init__(parent)
+        self.body = body
+
     ImageUpdate = pyqtSignal(QImage)
-    global current_pose
-    global current_fps
-    global current_motion
+    label_dict = pyqtSignal(dict)
+
     
     def run(self):
         
         # used for the camra feed while loop
         self.ThreadActive = True
-
+        output_dict = {'Fps':0,"Pose":"",
+                  "Motion":0, "Emotion":""}
+        
         # set camera resolution
         Capture = cv2.VideoCapture(0)
         Capture.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
@@ -158,17 +184,22 @@ class Worker1(QThread):
             if not (TIME_PASSED > 1. / Fps and ret):
                 continue
             Time_start = time()
-
-            # Puts the current pose's label and landmarks
-            current_pose = ps.detect_pose(frame)
+            
             
             # Puts the current FPS of the camera feed
-            current_fps = fps.get_fps(frame)
+            output_dict['Fps'] = fps.get_fps(frame)
 
-            # Puts the amount of motion detected
-            current_motion = md.detect_motion(frame)
+            if(self.body):
+                # Puts the current pose's label and landmarks
+                output_dict['Pose'] = ps.detect_pose(frame)
+                # Puts the amount of motion detected
+                output_dict['Motion'] = md.detect_motion(frame)
+            
+            else:
+                output_dict['Emotion'] = ed.detect_emotion(frame)
+            
 
-            print(current_pose, current_fps, current_motion)
+
 
             # converts the image from BGR to RGB for display
             frame =  cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
@@ -177,6 +208,8 @@ class Worker1(QThread):
                                         QImage.Format.Format_RGB888)
             # sends the image to the main window
             Pic = ConvertToQtFormat.scaled(640,512, Qt.AspectRatioMode.KeepAspectRatio)
+
+            self.label_dict.emit(output_dict)
             self.ImageUpdate.emit(Pic)
 
 
